@@ -39,3 +39,5 @@ build/
 !/api-gateway/volume-data/mysql_keycloak_data/.gitkeep
 
 .mvn/
+
+data/.gitkeep
