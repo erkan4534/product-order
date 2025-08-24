@@ -81,3 +81,8 @@ build/
 /inventory-service/.gitattributes
 /order-service/.gitattributes
 /api-gateway/.gitattributes
+
+/product-service/data/.gitkeep
+/api-gateway/volume-data/.gitkeep
+/inventory-service/docker/mysql2/data/.gitkeep
+/order-service/mysql/.gitkeep
