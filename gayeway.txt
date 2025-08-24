@@ -1,0 +1,131 @@
+Spring Cloud Gateway (WebFlux tabanlı) sana şunları reactive şekilde ekleme imkânı verir:
+
+*Authentication / Authorization
+*Rate Limiting (ör. RedisReactiveRateLimiter)
+*Logging, tracing, monitoring
+*Request/Response manipulation
+
+
+WebFlux’in olayı şu:
+
+Bir request cevabı beklenirken thread bloklanmaz.
+Aynı thread o sırada başka bir request’i işleyebilir.
+Yani klasik blocking servlet modelinde:
+1 request = 1 thread → cevap dönene kadar o thread kitlenir.
+WebFlux’te:
+1 thread = birçok request → cevap gelmese bile thread boşa beklemez, başka işi alır.
+
+---------------------------------------
+
+Keycloak Nedir?
+
+Keycloak, açık kaynaklı bir kimlik ve erişim yönetim sistemi (Identity and Access Management – IAM)’dir.
+Yani uygulamalarında giriş (login), kayıt (signup), yetkilendirme (authorization) gibi işleri senin yerine halleder.
+
+Ne İşe Yarar?
+
+Login & Logout: Kullanıcıların sisteme giriş/çıkış yapmasını sağlar.
+SSO (Single Sign-On): Bir kere giriş yapan kullanıcı, tüm bağlı uygulamalara tekrar şifre girmeden erişebilir.
+
+Kullanıcı Yönetimi: Kullanıcıları, rollerini (role), yetkilerini yönetebilirsin.
+OAuth2, OpenID Connect, SAML desteği: Modern güvenlik protokollerini hazır sağlar.
+
+Social Login: Google, Facebook, GitHub gibi hesaplarla giriş yapılmasını kolayca ekleyebilirsin.
+
+https://www.keycloak.org/
+-----------------------------------------
+
+Realm Nedir?
+
+Keycloak’ta realm, kullanıcıları, rollerini, gruplarını ve istemcilerini (clients) yönettiğin izole bir güvenlik alanıdır.
+
+Bunu şöyle düşünebilirsin:
+Realm = ayrı bir güvenlik evreni / domain.
+
+Bir realm içindeki kullanıcılar, roller ve uygulamalar başka bir realm ile karışmaz.
+
+-------------------------------------------
+Ne İşe Yarar?
+
+Kullanıcıları tanımlarsın (username, password).
+Rolleri tanımlarsın (admin, user, customer vs.).
+İstemcileri (Spring Boot uygulamaları, frontend uygulamaları) kaydedersin.
+O realm’in kurallarına göre kimlik doğrulama ve yetkilendirme yapılır.
+
+Client = Uygulamanın Keycloak’taki temsilcisi
+Uygulaman → Client ID ve Secret ile → Keycloak’tan Access Token / ID Token alır.
+Token ile kullanıcı kimliği ve rolleri servislerine taşınır.
+
+------------------------------------------------
+Client authentication" (ON / OFF) Ne Demek?
+
+Bu ayar aslında OIDC client tipini belirler:
+ON (Confidential Client)
+Uygulamanın (client) Keycloak’a erişirken client secret (şifre) kullanması gerekir.
+Daha güvenlidir çünkü sadece uygulama + Keycloak bilir.
+Genelde backend servisler (Spring Boot API, microservice) için kullanılır.
+
+Örn: API Gateway → Keycloak’tan token alırken clientId + clientSecret gönderir.
+
+OFF (Public Client)
+Client secret yoktur.
+Daha az güvenlidir çünkü herkes erişebilir (secret olmadığı için saklayacak bir şey yok).
+Genelde frontend uygulamalar (React, Angular, mobil app) için kullanılır.
+
+Örn: Bir React uygulaması tarayıcıda çalıştığı için secret saklayamaz → public client olur.
+
+------------------------------------------------
+
+1. Direct Access Grants
+
+(= OAuth2 Resource Owner Password Credentials Grant)
+Kim var? → Kullanıcı var.
+Kullanıcı, username + password bilgisini doğrudan client uygulamasına verir.
+Client bu bilgiyi Keycloak’a gönderir → Keycloak doğrular → kullanıcı adına access token döner.
+Token, kullanıcının rolleri/izinleri ile gelir.
+
+📌 Kullanım Alanı:
+Postman ile test yaparken hızlı token almak.
+Mobil app veya trusted uygulama senaryoları.
+⚠️ Eksisi: Kullanıcı şifresi client’a verildiği için güvenlik zayıf. Artık production’da pek önerilmez.
+
+🔑 2. Service Accounts Roles
+
+(= OAuth2 Client Credentials Grant)
+
+Kim var? → Kullanıcı yok, sadece client var.
+Client (ör. inventory-service) kendi clientId + clientSecret bilgisiyle Keycloak’a gider.
+Keycloak → client için access token üretir.
+Bu token bir kullanıcıya değil, client uygulamaya aittir.
+
+📌 Kullanım Alanı:
+
+Mikroservisler arası iletişim (M2M).
+Arka plan servisleri, cron job’lar, batch işlemleri.
+
+
+------------------------------------
+
+Senaryoyu sade şekilde özetleyeyim:
+
+Gateway, Keycloak’ta tanımlı bir client olarak kayıtlıdır (clientId, clientSecret var).
+Gateway, Keycloak’tan Service Account (client credentials) ile token alır.
+
+Burada kullanıcı yok, tamamen gateway’in kendi kimliği.
+Bu aldığı access token ile arka plandaki microservice’lere (order-service, product-service vs.) erişir.
+Servisler de gelen token’ı doğrular → “Bu istek gerçekten güvenilir bir client’tan mı geliyor?” diye.
+
+✅ Böylece:
+
+Gateway Keycloak’tan aldığı token’la servislerin kapısını açar.
+Kullanıcı adı/şifreye gerek yoktur.
+Servisler arası iletişim güvenli olur.
+
+------------------------------------------
+swagger
+
+https://www.openapis.org/
+
+https://springdoc.org/
+
+

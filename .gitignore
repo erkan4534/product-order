@@ -1,0 +1,86 @@
+# MySQL socket files
+*.sock
+
+# MySQL volume data
+/api-gateway/volume-data/
+/inventory-service/docker/mysql2/data/
+/order-service/mysql/
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# MySQL runtime files
+*.pid
+*.err
+*.cnf
+*.log
+*.ibd
+*.dblwr
+ib_logfile*
+ibdata*
+binlog.*
+#innodb*
+auto.cnf
+
+
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+/product-service/data/*
+!/product-service/data/.gitkeep
+
+/api-gateway/volume-data/mysql_keycloak_data/*
+!/api-gateway/volume-data/mysql_keycloak_data/.gitkeep
+
+.mvn/
+
+/api-gateway/target
+/inventory-service/target
+/order-service/target
+/product-service/target
+
+/product-service/data/*
+!/product-service/data/.gitkeep
+
+
+/product-service/.gitattributes
+/inventory-service/.gitattributes
+/order-service/.gitattributes
+/api-gateway/.gitattributes
