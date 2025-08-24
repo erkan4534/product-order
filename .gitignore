@@ -1,11 +1,6 @@
 # MySQL socket files
 *.sock
 
-# MySQL volume data
-/api-gateway/volume-data/
-/inventory-service/docker/mysql2/data/
-/order-service/mysql/
-
 # IntelliJ IDEA project files
 .idea/
 *.iml
@@ -63,12 +58,6 @@ build/
 ### VS Code ###
 .vscode/
 
-/product-service/data/*
-!/product-service/data/.gitkeep
-
-/api-gateway/volume-data/mysql_keycloak_data/*
-!/api-gateway/volume-data/mysql_keycloak_data/.gitkeep
-
 .mvn/
 
 /api-gateway/target
@@ -79,6 +68,14 @@ build/
 /product-service/data/*
 !/product-service/data/.gitkeep
 
+/inventory-service/docker/mysql2/data/*
+!/inventory-service/docker/mysql2/data/.gitkeep
+
+/order-service/mysql/*
+!/order-service/mysql/.gitkeep
+
+/api-gateway/volume-data/mysql_keycloak_data/*
+!/api-gateway/volume-data/mysql_keycloak_data/.gitkeep
 
 /product-service/.gitattributes
 /inventory-service/.gitattributes
