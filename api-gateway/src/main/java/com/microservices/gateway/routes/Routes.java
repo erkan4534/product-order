@@ -87,3 +87,12 @@ public class Routes {
                 .build();
     }
 }
+
+
+/**
+ *
+ * keyclock üzerinden token almak için kullanılacak endpoint, keyclock üzerindeki Realm Settings kısmında öğrenebilirsiniz.
+ * http://localhost:8181/realms/spring-microservices-security-realm/protocol/openid-connect/token
+ *
+ *
+ */
